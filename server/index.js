@@ -13,10 +13,8 @@ io.on('connection', socket => {
   socket.emit('whole state', state);
 
   socket.on('player state', newPlayerState => {
-    state[socket.id] = {
-      ...newPlayerState,
-      id: socket.id
-    };
+    newPlayerState.id = socket.id;
+    state[socket.id] = newPlayerState;
 
     socket.broadcast.emit('player state', state[socket.id]);
   })
