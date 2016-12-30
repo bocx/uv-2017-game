@@ -16,7 +16,7 @@ const canvas = document.createElement('canvas');
 canvas.width = 640;
 canvas.height = 360;
 const ctx = canvas.getContext('2d');
-document.body.prependChild(canvas);
+document.body.appendChild(canvas);
 
 function drawPlayer(ctx, player) {
   ctx.fillStyle = "rgb(200,0,0)";
