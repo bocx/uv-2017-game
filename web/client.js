@@ -1,8 +1,9 @@
 
 const state = {};
+const previousLocalPlayer = {};
 const localPlayer = {x: 100, y: 100};
 
-const socket = io();
+const socket = io('http://herpderp.fi:8095/');
 
 socket.on('whole state', newState => {
   _.assignIn(state, newState);
@@ -41,9 +42,13 @@ document.addEventListener('keyup', event => {
 });
 
 setInterval(() => {
-  localPlayer.x += pressed[keycodes.right] ? 1 : 0 - pressed[keyCodes.left] ? 1 : 0
-  localPlayer.y += pressed[keycodes.down] ? 1 : 0 - pressed[keyCodes.up] ? 1 : 0
+  _.assignIn(previousLocalPlayer, localPlayer);
+  localPlayer.x += 5 * ((_.includes(pressed, keyCodes.right) ? 1 : 0) - (_.includes(pressed, keyCodes.left) ? 1 : 0));
+  localPlayer.y += 5 * ((_.includes(pressed, keyCodes.down) ? 1 : 0) - (_.includes(pressed, keyCodes.up) ? 1 : 0));
   localPlayer.x = Math.min(canvas.width, Math.max(0, localPlayer.x));
   localPlayer.y = Math.min(canvas.height, Math.max(0, localPlayer.y));
-  socket.emit('player state', localPlayer);
+
+  if (!_.isEqual(previousLocalPlayer, localPlayer)) {
+    socket.emit('player state', localPlayer);
+  }
 }, 100);

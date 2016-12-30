@@ -21,5 +21,7 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
+    state[socket.id] = undefined;
+    socket.broadcast.emit('whole state', state);
   });
 });
